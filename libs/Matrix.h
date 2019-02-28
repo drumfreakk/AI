@@ -2,6 +2,7 @@
 #define AI_MATRIX_H
 
 #include <iostream>
+#include <cmath>
 
 class Matrix {
 private:
@@ -27,11 +28,26 @@ public:
 
 	~Matrix();
 
+	int getHeight();
+	int getWidth();
+
+	friend Matrix dot(Matrix &m1, Matrix &m2);
+
 	float& operator()(const int x, const int y);
+
+	float& operator[](const int z);
+
+	friend Matrix operator-(Matrix &m1, Matrix &m2);
+	friend Matrix operator+(Matrix &m1, Matrix &m2);
+	friend Matrix operator*(Matrix &m1, Matrix &m2);
+	friend Matrix operator*(Matrix &m1, const int scalar);
+	friend Matrix operator*(const int scalar, Matrix &m1);
 
 	friend std::ostream& operator<<(std::ostream& out, Matrix& matrix);
 
 };
 
+float sigmoid(float x);
+float derivative(float x);
 
 #endif
