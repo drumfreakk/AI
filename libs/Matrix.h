@@ -13,11 +13,9 @@ private:
 
 	int m_index(const int x, const int y);
 
-	const char* name;
-
 public:
-	Matrix(const int height, const int width, const char* name)
-		: m_height(height), m_width(width), name(name)
+	Matrix(const int height, const int width)
+		: m_height(height), m_width(width)
 	{
 		m_matrix = new float[m_width * m_height];
 
@@ -38,17 +36,20 @@ public:
 	int getHeight();
 	int getWidth();
 
+	friend Matrix sigmoid(Matrix x);
+	friend Matrix derivative(Matrix x);
+
 	Matrix transpose();
 
-	friend Matrix dot(Matrix &m1, Matrix &m2);
+	friend Matrix dot(Matrix m1, Matrix &m2);
 
 	float& operator()(const int x, const int y);
 
 	float& operator[](const int z);
 
 	friend Matrix operator-(Matrix &m1, Matrix &m2);
-	friend Matrix operator+(Matrix &m1, Matrix &m2);
-	friend Matrix operator*(Matrix &m1, Matrix &m2);
+	friend Matrix operator+(Matrix m1, Matrix m2);
+	friend Matrix operator*(Matrix m1, Matrix m2);
 
 	friend std::ostream& operator<<(std::ostream& out, Matrix &matrix);
 
@@ -56,5 +57,6 @@ public:
 
 float sigmoid(float x);
 float derivative(float x);
+
 
 #endif
