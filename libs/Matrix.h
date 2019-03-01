@@ -13,23 +13,32 @@ private:
 
 	int m_index(const int x, const int y);
 
+	const char* name;
+
 public:
-	Matrix(const int height, const int width)
-		: m_height(height), m_width(width)
+	Matrix(const int height, const int width, const char* name)
+		: m_height(height), m_width(width), name(name)
 	{
 		m_matrix = new float[m_width * m_height];
 
-		for(int y = 0; y < m_height; y++){
-			for(int x = 0; x < m_width; x++){
-				m_matrix[m_index(x, y)] = 0;
-			}
+		for(int z = 0; z < m_height; z++){
+			m_matrix[z] = 0;
 		}
 	}
+
+	Matrix(){
+		m_matrix = 0;
+	}
+
+	Matrix(const Matrix& source);
+	Matrix& operator=(const Matrix& source);
 
 	~Matrix();
 
 	int getHeight();
 	int getWidth();
+
+	Matrix transpose();
 
 	friend Matrix dot(Matrix &m1, Matrix &m2);
 
@@ -40,10 +49,8 @@ public:
 	friend Matrix operator-(Matrix &m1, Matrix &m2);
 	friend Matrix operator+(Matrix &m1, Matrix &m2);
 	friend Matrix operator*(Matrix &m1, Matrix &m2);
-	friend Matrix operator*(Matrix &m1, const int scalar);
-	friend Matrix operator*(const int scalar, Matrix &m1);
 
-	friend std::ostream& operator<<(std::ostream& out, Matrix& matrix);
+	friend std::ostream& operator<<(std::ostream& out, Matrix &matrix);
 
 };
 
