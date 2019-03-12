@@ -41,7 +41,7 @@ public:
 
 	Matrix transpose();
 
-	friend Matrix dot(Matrix m1, Matrix &m2);
+	friend Matrix dot(Matrix m1, Matrix m2);
 
 	float& operator()(const int x, const int y);
 
@@ -51,7 +51,7 @@ public:
 	friend Matrix operator+(Matrix m1, Matrix m2);
 	friend Matrix operator*(Matrix m1, Matrix m2);
 
-	friend std::ostream& operator<<(std::ostream& out, Matrix &matrix);
+	friend std::ostream& operator<<(std::ostream& out, Matrix matrix);
 
 };
 

@@ -17,7 +17,7 @@ int Matrix::m_index(const int x, const int y){
 	return (y * m_width) + x;
 }
 
-std::ostream& operator<<(std::ostream& out, Matrix &matrix){
+std::ostream& operator<<(std::ostream& out, Matrix matrix){
 	for(int y = 0; y < matrix.m_height; y++){
 		for(int x = 0; x < matrix.m_width; x++){
 			out << matrix(x, y) << '\t';
@@ -84,7 +84,7 @@ Matrix operator*(Matrix m1, Matrix m2){
 	return out;
 }
 
-Matrix dot(Matrix m1, Matrix &m2){
+Matrix dot(Matrix m1, Matrix m2){
 	if(m1.m_width != m2.m_height)
 		std::cerr << "dot: Invalid size!\n";
 
