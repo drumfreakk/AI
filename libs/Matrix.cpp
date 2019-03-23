@@ -10,10 +10,16 @@ float& Matrix::operator()(const int x, const int y){
 }
 
 float& Matrix::operator[](const int z){
-	return m_matrix[z];
+	if(z < m_height * m_width)
+		return m_matrix[z];
+	std::cerr << "operator[] too large";
 }
 
 int Matrix::m_index(const int x, const int y){
+	if(y > m_height && y < 0)
+		std::cerr << "m_index y out of bounds";
+	else if(x > m_width && x < 0)
+		std::cerr << "m_index x out of bounds";
 	return (y * m_width) + x;
 }
 
@@ -162,6 +168,31 @@ Matrix& Matrix::operator=(const Matrix& source){
 		m_matrix = 0;
 
 	return *this;
+}
+
+void Matrix::init(const std::initializer_list<std::initializer_list<float>> &list){
+
+	if(m_matrix)
+		delete[] m_matrix;
+
+	m_height = 0;
+
+	for(auto &element : list){
+		m_width = element.size();
+		m_height += 1;
+	}
+
+	m_matrix = new float[m_height * m_width];
+
+	int count = 0;
+	for(auto &element : list){
+		for(auto &el : element) {
+			m_matrix[count] = el;
+			count++;
+		}
+	}
+
+//	std::cout << "\nheight: " << m_height << "\twidth: " << m_width << "\n\n";
 }
 
 Matrix sigmoid(Matrix x){

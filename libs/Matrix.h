@@ -2,6 +2,7 @@
 #define AI_MATRIX_H
 
 #include <iostream>
+#include <initializer_list>
 #include <cmath>
 
 class Matrix {
@@ -30,6 +31,8 @@ public:
 
 	Matrix(const Matrix& source);
 	Matrix& operator=(const Matrix& source);
+
+	void init(const std::initializer_list<std::initializer_list<float>> &list);
 
 	~Matrix();
 
