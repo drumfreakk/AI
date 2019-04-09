@@ -61,5 +61,7 @@ public:
 float sigmoid(float x);
 float derivative(float x);
 
+float mean(Matrix mat);
+Matrix abs(Matrix &mat);
 
 #endif

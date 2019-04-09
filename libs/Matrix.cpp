@@ -1,25 +1,25 @@
 #include "Matrix.h"
 
+#include <cassert>
+
 Matrix::~Matrix(){
 	if(m_matrix)
 		delete[] m_matrix;
 }
 
 float& Matrix::operator()(const int x, const int y){
+	assert("Operator(): " && x < m_width && x >= 0 && y < m_height && y >= 0);
 	return m_matrix[m_index(x, y)];
 }
 
 float& Matrix::operator[](const int z){
-	if(z < m_height * m_width)
-		return m_matrix[z];
-	std::cerr << "operator[] too large";
+	assert("Operator[]: " && z < m_height * m_width && z >= 0);
+	return m_matrix[z];
 }
 
 int Matrix::m_index(const int x, const int y){
-	if(y > m_height && y < 0)
-		std::cerr << "m_index y out of bounds";
-	else if(x > m_width && x < 0)
-		std::cerr << "m_index x out of bounds";
+	assert("m_index(): " && y < m_height && y >= 0);
+	assert("m_index(): " && x < m_width && x >= 0);
 	return (y * m_width) + x;
 }
 
@@ -30,6 +30,7 @@ std::ostream& operator<<(std::ostream& out, Matrix matrix){
 		}
 		out << "\n";
 	}
+	out << '\n';
 
 	return out;
 
@@ -52,8 +53,12 @@ int Matrix::getWidth(){
 }
 
 Matrix operator-(Matrix &m1, Matrix &m2){
-	if(m1.m_height != m2.m_height || m1.m_width != m2.m_width)
-		std::cerr << "operator-: Invalid size!\n";
+
+	assert("operator-: " && m1.m_height == m2.m_height);
+	assert("operator-: " && m1.m_width == m2.m_width);
+
+//	if(m1.m_height != m2.m_height || m1.m_width != m2.m_width)
+//		std::cerr << "operator-: Invalid size!\n";
 
 	Matrix out(m1.m_height, m1.m_width);
 
@@ -65,8 +70,12 @@ Matrix operator-(Matrix &m1, Matrix &m2){
 }
 
 Matrix operator+(Matrix m1, Matrix m2){
-	if(m1.m_height != m2.m_height || m1.m_width != m2.m_width)
-		std::cerr << "operator+: Invalid size!\n";
+
+	assert("operator+: " && m1.m_height == m2.m_height);
+	assert("operator+: " && m1.m_width == m2.m_width);
+
+//	if(m1.m_height != m2.m_height || m1.m_width != m2.m_width)
+//		std::cerr << "operator+: Invalid size!\n";
 
 	Matrix out(m1.m_height, m1.m_width);
 
@@ -78,21 +87,25 @@ Matrix operator+(Matrix m1, Matrix m2){
 }
 
 Matrix operator*(Matrix m1, Matrix m2){
-	if(m1.m_height != m2.m_height || m1.m_width != m2.m_width)
-		std::cerr << "operator*: Invalid size!\n";
 
-	Matrix out(m1.m_height, 1);
+	assert("operator*: " && m1.m_height == m2.m_height);
+	assert("operator*: " && m1.m_width == m2.m_width);
 
-	for(int z = 0; z < m1.m_height; z++) {
-		out(0, z) = m1(0, z) * m2(0, z);
+//	if(m1.m_height != m2.m_height || m1.m_width != m2.m_width)
+//		std::cerr << "operator*: Invalid size!\n";
+
+	Matrix out(m1.m_height, m1.m_width);
+
+	for(int z = 0; z < m1.m_height * m1.m_width; z++) {
+		out[z] = m1[z] * m2[z];
 	}
 
 	return out;
 }
 
 Matrix dot(Matrix m1, Matrix m2){
-	if(m1.m_width != m2.m_height)
-		std::cerr << "dot: Invalid size!\n";
+
+	assert("dot(): " && m1.m_width == m2.m_height);
 
 	Matrix out(m1.m_height, m2.m_width);
 
@@ -198,8 +211,10 @@ void Matrix::init(const std::initializer_list<std::initializer_list<float>> &lis
 Matrix sigmoid(Matrix x){
 	Matrix out(x.m_height, x.m_width);
 
-	for(int z = 0; z < out.m_height * out.m_width; z++)
+	for(int z = 0; z < out.m_height * out.m_width; z++) {
 		out[z] = sigmoid(x[z]);
+//		std::cout << z << '\n';
+	}
 
 	return out;
 }
@@ -210,5 +225,22 @@ Matrix derivative(Matrix x){
 	for(int z = 0; z < out.m_height * out.m_width; z++)
 		out[z] = derivative(x[z]);
 
+	return out;
+}
+
+float mean(Matrix mat){
+	float count = 0;
+	for(int z = 0; z < mat.getHeight() * mat.getWidth(); z++){
+		count += mat[z];
+	}
+	return count / (mat.getHeight() * mat.getWidth());
+}
+
+Matrix abs(Matrix &mat){
+	Matrix out = mat;
+	for(int z = 0; z < mat.getHeight() * mat.getWidth(); z++){
+		if(mat[z] < 0)
+			out[z] = mat[z] * -1;
+	}
 	return out;
 }
